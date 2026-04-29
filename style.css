@@ -1,0 +1,9 @@
+
+.profil-foto {
+    width: 200px; /* Fotoğrafın genişliğini küçültüyoruz  */
+    height: 200px; /* Yüksekliği genişlikle aynı yaparak kare elde ediyoruz  */
+    object-fit: cover; /* Fotoğrafın bozulmadan karenin içine sığmasını sağlar  */
+    border-radius: 50%; /* Fotoğrafı tam daire ("şekilli") yapar  */
+    border: 5px solid white; /* İsteğe bağlı: Beyaz bir çerçeve ekler  */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* İsteğe bağlı: Hafif gölge verir  */
+}
