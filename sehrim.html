@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şehrim | Proje Ödevi</title>
+    <!-- İnternetten kütüphane çekilmedi, sadece kendi css dosyan bağlandı -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="custom-header">
+        <div class="container nav-container">
+            <a class="logo" href="index.html"><i> <mark>Benim Siteme Hoşgeldiniz</mark></i></a>
+            <nav>
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">Hakkında</a></li>
+                    <li><a class="nav-link" href="cv.html">Özgeçmiş</a></li>
+                    <li><a class="nav-link active" href="sehrim.html">Şehrim</a></li>
+                    <li><a class="nav-link" href="ilgi_alanlarim.html">İlgi Alanlarım</a></li>
+                    <li><a class="nav-link" href="iletisim.html">İletişim</a></li>
+                    <li><a class="btn-login" href="login.php">Giriş Yap</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container page-content">
+        <div class="page-header">
+            <h1>İstanbul</h1>
+            <p>Tarihin ve kültürün başkenti, iki kıtayı birbirine bağlayan şehir.</p>
+        </div>
+
+        <!-- Yönergedeki En Az 4 Resimli Slider Bölümü -->
+        <section class="slider-section">
+            <div class="slider-container">
+                <div class="slides">
+                    <div class="slide active">
+                        <img src="galata.jpg" alt="Galata Kulesi">
+                        <div class="slide-caption">Galata Kulesi</div>
+                    </div>
+                    <div class="slide">
+                        <img src="bogaz.jpg" alt="İstanbul Boğazı">
+                        <div class="slide-caption">İstanbul Boğazı</div>
+                    </div>
+                    <div class="slide">
+                        <img src="kizkulesi.jpg" alt="Kız Kulesi">
+                        <div class="slide-caption">Kız Kulesi</div>
+                    </div>
+                    <div class="slide">
+                        <img src="ayasofya.jpg" alt="Ayasofya">
+                        <div class="slide-caption">Ayasofya Cami</div>
+                    </div>
+                </div>
+                <!-- Yönlendirme Butonları -->
+                <button class="slider-btn prev-btn" onclick="slaytDegistir(-1)">&#10094;</button>
+                <button class="slider-btn next-btn" onclick="slaytDegistir(1)">&#10095;</button>
+            </div>
+        </section>
+
+        <!-- Bilgiler ve Mirasımız Bölümü -->
+        <div class="info-grid">
+            <section class="info-card">
+                <h3 class="card-title text-primary">Şehir Bilgileri</h3>
+                <p>İstanbul, Türkiye'nin en kalabalık ve ekonomik açıdan en önemli şehridir. Hem Asya hem de Avrupa kıtasında toprağı bulunan bu eşsiz şehir, yüzyıllar boyunca Roma, Bizans ve Osmanlı imparatorluklarına başkentlik yapmıştır.</p>
+                <ul class="default-list mt-3">
+                    <li><strong>Nüfus:</strong> Yaklaşık 16 Milyon</li>
+                    <li><strong>Bölge:</strong> Marmara Bölgesi</li>
+                    <li><strong>Plaka Kodu:</strong> 34</li>
+                </ul>
+            </section>
+
+            <section class="info-card heritage-card">
+                <h3 class="card-title text-danger">Mirasımız: Galata Kulesi</h3>
+                <p>Galata Kulesi, dünyanın en eski kulelerinden biri olarak kabul edilir. Cenevizliler tarafından 1348 yılında inşa edilmiş olan bu yapı, İstanbul'un silüetinin en önemli parçalarından biridir.</p>
+                <p>Geçmişte gözetleme kulesi, zindan ve yangın kulesi olarak farklı amaçlarla kullanılmış olan kule, günümüzde müze olarak hizmet vermektedir ve İstanbul'un 360 derece panoramik manzarasını sunmaktadır.</p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Burak Eren - Web Teknolojileri Proje Ödevi</p>
+    </footer>
+
+    <!-- Dışarıdan kütüphane kullanmadan yazılan Saf JS Slider Kodları -->
+    <script>
+        let gecerliSlayt = 0;
+        const slaytlar = document.querySelectorAll('.slide');
+
+        function slaytGoster(index) {
+            // Tüm slaytları gizle
+            slaytlar.forEach(slayt => slayt.classList.remove('active'));
+            
+            // Sınırları kontrol et (Başa veya sona sar)
+            if (index >= slaytlar.length) gecerliSlayt = 0;
+            if (index < 0) gecerliSlayt = slaytlar.length - 1;
+            
+            // İlgili slaytı göster
+            slaytlar[gecerliSlayt].classList.add('active');
+        }
+
+        function slaytDegistir(yon) {
+            gecerliSlayt += yon;
+            slaytGoster(gecerliSlayt);
+        }
+
+        // İsteğe bağlı: Slaytın 5 saniyede bir otomatik dönmesi için
+        setInterval(() => {
+            slaytDegistir(1);
+        }, 5000);
+    </script>
+</body>
+</html>
