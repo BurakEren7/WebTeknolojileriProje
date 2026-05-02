@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlgi Alanlarım (API) | Proje Ödevi</title>
+ 
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   
+    <header class="custom-header">
+        <div class="container nav-container">
+            <a class="logo" href="index.html"><i> <mark>Benim Siteme Hoşgeldiniz</mark></i></a>
+            <nav>
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">Hakkında</a></li>
+                    <li><a class="nav-link" href="cv.html">Özgeçmiş</a></li>
+                    <li><a class="nav-link" href="sehrim.html">Şehrim</a></li>
+                    
+                    <li><a class="nav-link active" href="ilgi_alanlarim.html">İlgi Alanlarım</a></li>
+                    <li><a class="nav-link" href="iletisim.html">İletişim</a></li>
+                    <li><a class="btn-login" href="login.php">Giriş Yap</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container page-content">
+        <div class="page-header">
+            <h1>İlgi Alanlarım & Favori İçeriklerim</h1>
+            <p>Aşağıdaki arama çubuğunu kullanarak ilgimi çeken oyun uyarlamalarını (Örn: The Last of Us) veya tarihi dizileri (Örn: Rome, Dirilis) TVMaze API üzerinden canlı aratabilirsiniz.</p>
+        </div>
+
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Dizi veya film arayın..." value="The Last of Us">
+            <button onclick="veriCek()" class="btn-search">Ara</button>
+        </div>
+
+        
+        <div id="sonucAlani" class="api-grid">
+           
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Burak Eren - Web Teknolojileri Proje Ödevi</p>
+    </footer>
+
+   
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            veriCek();
+        });
+
+       
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                veriCek();
+            }
+        });
+
+        function veriCek() {
+            const aramaKelimesi = document.getElementById('searchInput').value;
+            const sonucAlani = document.getElementById('sonucAlani');
+            
+           
+            sonucAlani.innerHTML = `
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>`;
+
+           
+            fetch(`https://api.tvmaze.com/search/shows?q=${aramaKelimesi}`)
+                .then(response => response.json())
+                .then(data => {
+                    sonucAlani.innerHTML = ''; // Yükleniyor animasyonunu temizle
+
+                    
+                    if (data.length === 0) {
+                        sonucAlani.innerHTML = '<div class="api-msg msg-danger">Aradığınız kriterlere uygun içerik bulunamadı.</div>';
+                        return;
+                    }
+
+                   
+                    data.forEach(item => {
+                        const show = item.show;
+                        
+                      
+                        const imageUrl = show.image ? show.image.medium : 'https://via.placeholder.com/210x295?text=Gorsel+Yok';
+                        
+                        let summaryText = show.summary ? show.summary.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...' : 'Bu içerik için özet bilgisi bulunmuyor.';
+
+                        
+                        const cardHTML = `
+                            <div class="api-card">
+                                <img src="${imageUrl}" alt="${show.name}">
+                                <div class="api-card-body">
+                                    <h3 class="api-card-title">${show.name}</h3>
+                                    <div class="api-card-genre">Tür: ${show.genres.join(', ') || 'Belirtilmemiş'}</div>
+                                    <p class="api-card-text">${summaryText}</p>
+                                    <a href="${show.url}" target="_blank" class="btn-detail">Detayları Gör</a>
+                                </div>
+                            </div>
+                        `;
+                        // Kartı alana ekle
+                        sonucAlani.innerHTML += cardHTML;
+                    });
+                })
+                .catch(error => {
+                    console.error('API Hatası:', error);
+                    sonucAlani.innerHTML = '<div class="api-msg msg-danger">Veri çekilirken bir hata oluştu. İnternet bağlantınızı kontrol ediniz.</div>';
+                });
+        }
+    </script>
+</body>
+</html>
