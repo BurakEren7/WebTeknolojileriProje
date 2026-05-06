@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim | Proje Ödevi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+    <header class="custom-header">
+        <div class="container nav-container">
+            <a class="logo" href="index.html"><i> <mark>Benim Siteme Hoşgeldiniz</mark></i></a>
+            <nav>
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">Hakkında</a></li>
+                    <li><a class="nav-link" href="cv.html">Özgeçmiş</a></li>
+                    <li><a class="nav-link" href="sehrim.html">Şehrim</a></li>
+                    <li><a class="nav-link" href="ilgi_alanlarim.html">İlgi Alanlarım</a></li>
+                    <li><a class="nav-link active" href="iletisim.html">İletişim</a></li>
+                    <li><a class="btn-login" href="login.php">Giriş Yap</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8" id="vue-app">
+                
+                <h1 class="text-center mb-4">İletişim Formu</h1>
+                <p class="text-center text-muted mb-4">Görüş, öneri veya bilgi almak için formu doldurabilirsiniz.</p>
+
+                <div id="js-error-box" class="alert alert-danger d-none"></div>
+
+                <div v-if="vueErrors.length > 0" class="alert alert-danger">
+                    <ul class="mb-0">
+                        <li v-for="error in vueErrors">{{ error }}</li>
+                    </ul>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <form id="iletisimFormu" action="iletisim_sonuc.php" method="POST" novalidate>
+                            
+                            <div class="mb-3">
+                                <label for="adSoyad" class="form-label">Ad Soyad</label>
+                                <input type="text" class="form-control" id="adSoyad" name="adSoyad" v-model="form.adSoyad" placeholder="Adınızı ve soyadınızı giriniz">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">E-Posta Adresi</label>
+                                <input type="email" class="form-control" id="email" name="email" v-model="form.email" placeholder="ornek@sakarya.edu.tr">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telefon" class="form-label">Telefon Numarası</label>
+                                <input type="text" class="form-control" id="telefon" name="telefon" v-model="form.telefon" placeholder="Örn: 05551234567">
+                                <div class="form-text">Sadece rakam giriniz. Boşluk bırakmayınız.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="sehir" class="form-label">Yaşadığınız Şehir</label>
+                                <select class="form-select" id="sehir" name="sehir" v-model="form.sehir">
+                                    <option value="">Seçiniz...</option>
+                                    <option value="İstanbul">İstanbul</option>
+                                    <option value="Sakarya">Sakarya</option>
+                                    <option value="Giresun">Giresun</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label d-block">Cinsiyet</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cinsiyet" id="erkek" value="Erkek" v-model="form.cinsiyet">
+                                    <label class="form-check-label" for="erkek">Erkek</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="cinsiyet" id="kadin" value="Kadın" v-model="form.cinsiyet">
+                                    <label class="form-check-label" for="kadin">Kadın</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label d-block">İletişim Nedeni</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="neden[]" id="bilgi" value="Bilgi Alma" v-model="form.nedenler">
+                                    <label class="form-check-label" for="bilgi">Bilgi Alma</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="neden[]" id="oneri" value="Öneri" v-model="form.nedenler">
+                                    <label class="form-check-label" for="oneri">Öneri</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="mesaj" class="form-label">Mesajınız</label>
+                                <textarea class="form-control" id="mesaj" name="mesaj" rows="4" v-model="form.mesaj" placeholder="Mesajınızı buraya yazabilirsiniz..."></textarea>
+                            </div>
+
+                            <div class="d-flex gap-2 justify-content-center">
+                                <button type="button" class="btn btn-dark w-50" onclick="nativeJsDogrula()">JS ile Doğrula ve Gönder</button>
+                                <button type="button" class="btn btn-success w-50" @click="vueDogrula">Vue.js ile Doğrula ve Gönder</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto custom-footer">
+        <p class="mb-0">&copy; 2026 Burak Eren - Web Teknolojileri Proje Ödevi</p>
+    </footer>
+
+    <script>
+        function nativeJsDogrula() {
+            let adSoyad = document.getElementById('adSoyad').value.trim();
+            let email = document.getElementById('email').value.trim();
+            let telefon = document.getElementById('telefon').value.trim();
+            let sehir = document.getElementById('sehir').value;
+            let mesaj = document.getElementById('mesaj').value.trim();
+            
+            let cinsiyetSectiMi = document.querySelector('input[name="cinsiyet"]:checked');
+            
+            let hataKutusu = document.getElementById('js-error-box');
+            let hatalar = [];
+
+            // Regex Tanımlamaları
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let telefonRegex = /^[0-9]+$/;
+
+            if (adSoyad === "") hatalar.push("Ad Soyad alanı boş bırakılamaz.");
+            
+            if (email === "") {
+                hatalar.push("E-Posta alanı boş bırakılamaz.");
+            } else if (!emailRegex.test(email)) {
+                hatalar.push("Geçerli bir E-Posta adresi giriniz.");
+            }
+
+            if (telefon === "") {
+                hatalar.push("Telefon numarası boş bırakılamaz.");
+            } else if (!telefonRegex.test(telefon)) {
+                hatalar.push("Telefon numarası sadece rakamlardan oluşmalıdır.");
+            }
+
+            if (sehir === "") hatalar.push("Lütfen yaşadığınız şehri seçiniz.");
+            if (!cinsiyetSectiMi) hatalar.push("Lütfen cinsiyetinizi belirtiniz.");
+            if (mesaj === "") hatalar.push("Mesaj alanı boş bırakılamaz.");
+
+            if (hatalar.length > 0) {
+                // Hataları ekrana bas
+                hataKutusu.innerHTML = "<strong>JavaScript Hataları:</strong><br>" + hatalar.join("<br>");
+                hataKutusu.classList.remove('d-none');
+            } else {
+                // Hata yoksa formu gönder
+                hataKutusu.classList.add('d-none');
+                document.getElementById('iletisimFormu').submit();
+            }
+        }
+    </script>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    form: {
+                        adSoyad: '',
+                        email: '',
+                        telefon: '',
+                        sehir: '',
+                        cinsiyet: null,
+                        nedenler: [],
+                        mesaj: ''
+                    },
+                    vueErrors: []
+                }
+            },
+            methods: {
+                vueDogrula() {
+                    this.vueErrors = []; // Önceki hataları temizle
+                    document.getElementById('js-error-box').classList.add('d-none'); // JS kutusunu gizle
+
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    const numaraRegex = /^[0-9]+$/;
+
+                    if (!this.form.adSoyad) this.vueErrors.push('Vue.js: Ad Soyad zorunludur.');
+                    
+                    if (!this.form.email) {
+                        this.vueErrors.push('Vue.js: E-posta zorunludur.');
+                    } else if (!emailRegex.test(this.form.email)) {
+                        this.vueErrors.push('Vue.js: Geçerli bir e-posta formatı gerekli.');
+                    }
+
+                    if (!this.form.telefon) {
+                        this.vueErrors.push('Vue.js: Telefon zorunludur.');
+                    } else if (!numaraRegex.test(this.form.telefon)) {
+                        this.vueErrors.push('Vue.js: Telefon sadece rakamlardan oluşmalıdır.');
+                    }
+
+                    if (!this.form.sehir) this.vueErrors.push('Vue.js: Bir şehir seçmelisiniz.');
+                    if (!this.form.cinsiyet) this.vueErrors.push('Vue.js: Cinsiyet seçimi yapmalısınız.');
+                    if (!this.form.mesaj) this.vueErrors.push('Vue.js: Mesaj kısmı boş bırakılamaz.');
+
+                    // Hata yoksa formu DOM üzerinden submit et
+                    if (this.vueErrors.length === 0) {
+                        document.getElementById('iletisimFormu').submit();
+                    }
+                }
+            }
+        }).mount('#vue-app');
+    </script>
+</body>
+</html>
