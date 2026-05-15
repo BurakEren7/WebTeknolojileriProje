@@ -7,15 +7,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $sifre = $_POST['sifre'];
 
-    // Öğrenci numarasını mail adresinden ayrıştırma (örn: b2412100001)
-    $ogrenciNo = explode('@', $email)[0];
+    // Beklenen giriş bilgileri
+    $beklenenEmail = "b251210048@sakarya.edu.tr";
+    $beklenenSifre = "b251210048";
 
-    // PHP tarafında da basit bir güvenlik kontrolü
+    // Öğrenci numarasını mail adresinden ayrıştırma
+    $ogrenciNo = explode('@', $beklenenEmail)[0];
+
+    // PHP tarafında güvenlik kontrolü
     if (empty($email) || empty($sifre)) {
         $mesaj = "<div class='alert alert-danger'>Alanlar boş bırakılamaz! Tekrar deneyin.</div>";
-    } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false || strpos($email, '@sakarya.edu.tr') === false) {
-        $mesaj = "<div class='alert alert-danger'>Lütfen geçerli bir öğrenci mail adresi giriniz.</div>";
-    } elseif ($sifre === $ogrenciNo) {
+    } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        $mesaj = "<div class='alert alert-danger'>Lütfen geçerli bir mail formatı giriniz.</div>";
+    } elseif ($email === $beklenenEmail && $sifre === $beklenenSifre) {
         $mesaj = "<div class='alert alert-success text-center'><h2 class='display-6'>Hoşgeldiniz $ogrenciNo</h2><p>Giriş işlemi başarıyla tamamlandı.</p></div>";
         $girisBasarili = true;
     } else {
@@ -52,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <!-- PHP'den gelen hata veya başarı mesajı burada gösterilecek -->
                 <?= $mesaj ?>
 
                 <?php if(!$girisBasarili): ?>
@@ -62,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <form action="login.php" method="POST" onsubmit="return jsKontrol(event)">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Öğrenci Mail Adresi</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="b2412100001@sakarya.edu.tr">
+                                <input type="text" class="form-control" id="email" name="email" placeholder="b251210048@sakarya.edu.tr">
                             </div>
                             <div class="mb-3">
                                 <label for="sifre" class="form-label">Şifre (Öğrenci No)</label>
